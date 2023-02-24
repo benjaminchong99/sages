@@ -6,15 +6,13 @@ stb.set_chapter_config(path="Questions")
 
 ### Manual HTML CSS ###
 
+####################### COMMENTS FOR STYLE #######################
 # .css-dg4u6x.e16nr0p34 writes "Page sth of sth: from_which_file"
+
 manual_adjustment = """
 <style>
 #quiz {
-  text-align: center
-}
-
-.st-ck, .st-cp {
-    background: rgba(172,177,195,0.25) 100%;
+  text-align: center;
 }
 
 .css-dg4u6x.e16nr0p34 {
