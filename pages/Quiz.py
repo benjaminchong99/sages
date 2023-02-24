@@ -19,3 +19,6 @@ st.write("Hello Quiz")
 
 # method to switch page below
 # switch_page("Results")
+st.write("Question 1: sth sth sth isit sth?")
+st.button("Option 1")
+st.button("Option 2")
