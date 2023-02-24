@@ -2,14 +2,14 @@ import streamlit as st
 from streamlit_extras.switch_page_button import switch_page
 
 ### Manual HTML CSS ###
-title_alignment = """
+manual_adjustment = """
 <style>
-#quiz {
-  text-align: center
+.stMarkdown {
+  visibility: hidden;
 }
 </style>
 """
-st.markdown(title_alignment, unsafe_allow_html=True)
+st.markdown(manual_adjustment, unsafe_allow_html=True)
 
 ### END OF MANUAL HTML CSS ###
 
