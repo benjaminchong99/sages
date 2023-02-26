@@ -32,22 +32,9 @@ qn_d = [
 ]
 
 # maybe store xunzi and mengzi texts in txt files instead
-xunzi_text = """You are a serious and methodical individual who are always focused on your goals. You are the type of character who carefully plans out your moves and always follows the rules, even if it means taking a more difficult path. 
+xunzi_text = open("philos_texts/xunzi.txt", "r").read()
+mengzi_text = open("philos_texts/xunzi.txt", "r").read()
 
-When seeking a lifelong spouse, you find a partner who shares your values and beliefs, and you look for someone who is willing to work hard and follow his lead. 
-
-You often face challenges that test your patience and your ability to adapt to unexpected circumstances. However, in the face of challenges you would always rely on your intelligence and ability to strategize in order to overcome these obstacles.
-
-According to XunZi's interpretation of confucius, he recommends you [continue this later]
-"""
-mengzi_text = """You are a charismatic and compassionate individual who always puts others first. You are the type of character who is always willing to lend a hand to those in need, even if it means taking a risk. 
-
-When seeking a lifelong spouse, you find a partner who shares your values of kindness and empathy, and you look for someone who is willing to work with you as a team. 
-
-You often face challenges that test your emotional intelligence and your ability to connect with others on a deep level. However, in the face of challenges you would always rely on his natural charm and his ability to inspire others in order to overcome these obstacles.
-
-According to MengZi's interpretation of confucius, he recommends you [continue this later]
-"""
 
 # add if clause
 # add counter for question num
