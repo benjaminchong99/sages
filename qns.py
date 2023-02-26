@@ -10,12 +10,28 @@ import numpy as np
 ################ INSTANTIATION #############
 
 # add dictionary of questions
+# list of tuples?
 qn_d = [
-    ("How do you view the inner beauty (virtuousness) of humans?", "Displaying the innate beauty of human nature", "Decorating/ beautifying self to hide the innate ugliness of human nature", -1), # points refer to bool of 1st value being xunzi
-    ("question", "question 2_x", "question 2_m", 1),
-    ("question", "question 3_m", "question 3_x", -1)
-    ]   
+    ("How do you view the inner beauty (virtuousness) of humans?", "Displaying the innate beauty of human nature",
+     "Decorating/ beautifying self to hide the innate ugliness of human nature", -1),  # points refer to bool of 1st value being xunzi
+    ("As a parent, how would you help your child build character and moral values?",
+     "Create the ideal environment for their growth. Given nourishment, there is nothing that will not grow.", "The child’s moral education must be greatly interfered with.", -1),
+    ("Do you do good because...",
+     "you do it to just spread goodness to others? ", "you hope to be treated by others the same way", -1),
+    ("What is a gentleman?",
+     "Someone who can overcome and eradicate desire for material interests", "Even when he speaks only a little, he is straightforward yet reserved in his use of words. ", -1),
+    ("What is ritual used for?",
+     "To keep the temporary monarch in check, since they hold absolute moral power", "Ritual is required so that the chaotic morally equal but socially divided men in a society become well-ordered.", -1),
+    ("question6", "question3_m", "question3_x", -1),
+    ("question7", "question3_m", "question3_x", -1),
+    ("question8", "question3_m", "question3_x", -1),
+    ("question9", "question3_m", "question3_x", -1),
+    ("question10", "question3_m", "question3_x", -1),
+    ("question11", "question3_m", "question3_x", -1),
+    ("question12", "question3_m", "question3_x", -1)
+]
 
+# maybe store xunzi and mengzi texts in txt files instead
 xunzi_text = """You are a serious and methodical individual who are always focused on your goals. You are the type of character who carefully plans out your moves and always follows the rules, even if it means taking a more difficult path. 
 
 When seeking a lifelong spouse, you find a partner who shares your values and beliefs, and you look for someone who is willing to work hard and follow his lead. 
@@ -52,6 +68,7 @@ def add_top_count(x):
     st.session_state.count = count + 1
     st.session_state.score = score + x
 
+
 def add_bottom_count(x):
     count = st.session_state.count
     score = st.session_state.score
@@ -59,22 +76,26 @@ def add_bottom_count(x):
     st.session_state.score = score - x
     # if xunzi at the bottom, it would add one (it's like hinge loss)
 
+
 def add_count():
     count = st.session_state.count
     st.session_state.count = count + 1
+
 
 def setImage(pathToImg, ratio, caption=None):
     image = Image.open(pathToImg)
     width, height = image.size
     st.image(image, caption=caption, width=int(width*ratio))
 
+
 def setScore(scholar):
-    with open('scholars.txt','w') as f:
+    with open('scholars.txt', 'w') as f:
         f.write(scholar)
         f.write('\n')
 
+
 def getScore():
-    with open('scholars.txt','r') as f:
+    with open('scholars.txt', 'r') as f:
         full = f.read()
         flist = full.split('\n')
 
@@ -87,20 +108,24 @@ def getScore():
 #################### QUIZ SEGMENT START #####################
 #############################################################
 
+
 # add quiz end page
 index = st.session_state.count
 
-my_bar = st.progress(index*int(100/4))
+my_bar = st.progress(index*int(100/len(qn_d)))
 
-if index < 3:
+# if index < 3:
+if index < len(qn_d):
     # add container
     with st.container():
-    
+
         # add buttons
         question, text1, text2, score = qn_d[index]
         st.header(question)
-        clicked1 = st.button(text1, key="btn1", use_container_width=True,on_click=add_top_count, args=[score])
-        clicked2 = st.button(text2, key="btn2", use_container_width=True,on_click=add_bottom_count, args=[score])
+        clicked1 = st.button(
+            text1, key="btn1", on_click=add_top_count, args=[score])
+        clicked2 = st.button(text2, key="btn2", on_click=add_bottom_count, args=[
+                             score])
 
 #############################################################
 #################### QUIZ SEGMENT END #######################
@@ -110,33 +135,36 @@ if index < 3:
 ################# RESULTS SEGMENT START #####################
 #############################################################
 
-elif index == 3: # to be changed to 12
+# elif index == 3:  # to be changed to 12
+elif index == len(qn_d):  # to be changed to 12
     with st.container():
 
         score = st.session_state.score
         st.write(xunzi_text if score > 0 else mengzi_text)
-        
-        setScore("Xunzi" if score > 0 else "Mengzi") # write to csv file
-        
-        clicked1 = st.button("see all participants", key="btn1", use_container_width=True,on_click=add_count) # buttons go to next "page"
+
+        setScore("Xunzi" if score > 0 else "Mengzi")  # write to csv file
+
+        # buttons go to next "page"
+        clicked1 = st.button("see all participants",
+                             key="btn1",  on_click=add_count)
 
 else:
-        st.title("Results")
-        del st.session_state['count'] # clear all cache from this test run
-        del st.session_state['score']
+    st.title("Results")
+    del st.session_state['count']  # clear all cache from this test run
+    del st.session_state['score']
 
-        ratio = getScore() # xunzi/total
+    ratio = getScore()  # xunzi/total
 
-        col1, col2 = st.columns(2)  # 2 columns layout
-        with col1:
-            st.title("Mengzi")
-            setImage("img/sampleperson.png",(1-ratio))
-            st.markdown("Some description")
+    col1, col2 = st.columns(2)  # 2 columns layout
+    with col1:
+        st.title("Mengzi")
+        setImage("img/sampleperson.png", (1-ratio))
+        st.markdown("Some description")
 
-        with col2:
-            st.title("Xunzi")
-            setImage("img/sampleperson.png",ratio)
-            st.markdown("Some description")
+    with col2:
+        st.title("Xunzi")
+        setImage("img/sampleperson.png", ratio)
+        st.markdown("Some description")
 
 #############################################################
 ################# RESULTS SEGMENT END #####################
