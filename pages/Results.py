@@ -2,44 +2,54 @@ import streamlit as st
 from PIL import Image
 
 
-### Manual HTML CSS ###
+#############################################################
+####################### MANUAL CSS ##########################
+#############################################################
+
+
+# .css-1v0mbdj image
 title_alignment = """
 <style>
 
 .css-1v0mbdj {
-    width: 50%;
     justify-content: center;
 }
 
-#results, #mengzi, #xunzi {
+body {
   text-align: center;
 }
+
 </style>
 """
 st.markdown(title_alignment, unsafe_allow_html=True)
-### END OF MANUAL HTML CSS ###
 
-### FUNCTIONS ###
-
-
-def setImage(pathToImg, caption=None):
-    image = Image.open(pathToImg)
-    st.image(image, caption)
-
-### START OF WEBPAGE ###
+#############################################################
+####################### FUNCTIONS ###########################
+#############################################################
 
 
-st.title("Results")
+def setImage(ratioOfPhil, caption=None):
+    image1 = Image.open("img/sampleperson.png")
+    image2 = Image.open("img/sampleimg.jpg")
+    width, height = image1.size
+    # crop dimensions
+    cropLen = int(width*ratioOfPhil)
 
-col1, col2 = st.columns(2)  # 2 columns layout
+    image3 = image1.crop((0, 0, cropLen, height))
+    image4 = image2.crop((cropLen, 0, width, height))
 
-with col1:
-    st.title("Mengzi")
-    setImage("img/sampleperson.png")
-    st.markdown("Some description")
+    overalImg = Image.new('RGB', (image3.width + image4.width, image3.height))
+    overalImg.paste(image3, (0, 0))
+    overalImg.paste(image4, (image3.width, 0))
+    st.image(overalImg, caption)
+    # st.image(image4, caption)
+
+#############################################################
+#################### START OF WEBPAGE #######################
+#############################################################
 
 
-with col2:
-    st.title("Xunzi")
-    setImage("img/sampleperson.png")
-    st.markdown("Some description")
+st.title("Your Profile:")
+setImage(0.4)
+# insert profiling descriptor here
+st.markdown("Some description")
