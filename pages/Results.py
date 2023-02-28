@@ -49,7 +49,7 @@ def setImage(ratioOfPhil, caption=None):
 #############################################################
 
 
-st.title("Your Profile:")
+st.title("As of right now, the world stands...")
 setImage(0.4)
 # insert profiling descriptor here
 st.markdown("Some description")

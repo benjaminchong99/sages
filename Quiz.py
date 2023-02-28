@@ -12,53 +12,53 @@ from streamlit_extras.switch_page_button import switch_page
 # add dictionary of questions
 # list of tuples?
 # Must be odd number of questions**
-qn_d = [
-    ("How do you view the inner beauty (virtuousness) of humans?",
-     "Displaying the innate beauty of human nature",
-     "Decorating/ beautifying self to hide the innate ugliness of human nature",
-     -1),  # points refer to bool of 1st value being xunzi
-    ("As a parent, how would you help your child build character and moral values?",
-     "Create the ideal environment for their growth. Given nourishment, there is nothing that will not grow.",
-     "The child’s moral education must be greatly interfered with.",
-     -1),
-    ("Do you do good because...",
-     "you do it to just spread goodness to others? ",
-     "you hope to be treated by others the same way",
-     -1),
-    ("What is a gentleman?",
-     "Someone who can overcome and eradicate desire for material interests",
-     "Even when he speaks only a little, he is straightforward yet reserved in his use of words. ",
-     -1),
-    ("What is ritual used for?",
-     "To keep the temporary monarch in check, since they hold absolute moral power",
-     "Ritual is required so that the chaotic morally equal but socially divided men in a society become well-ordered.",
-     -1),
-    ("Should the king be the one owning most of  the resources or should resources be shared?",
-     "Minimally. If the king has enough food, shelter and beauties, the king has been given enough.",
-     "Yes! It is the luxuries the king can have that encourages him to follow the way",
-     -1),
-    ("question7",
-     "question3_m",
-     "question3_x",
-     -1),
-    ("question8",
-     "question3_m",
-     "question3_x",
-     -1),
-    ("question9",
-     "question3_m",
-     "question3_x",
-     -1),
-    ("question10",
-     "question3_m",
-     "question3_x",
-     -1),
-    ("question11",
-     "question3_m",
-     "question3_x",
-     -1)
-]
-len_qn = len(qn_d)
+qn_d = [("frontpage", "frontpage", "frontpage", "frontpage"),
+        ("How do you view the inner beauty (virtuousness) of humans?",
+         "Displaying the innate beauty of human nature",
+         "Decorating/ beautifying self to hide the innate ugliness of human nature",
+         -1),  # points refer to bool of 1st value being xunzi
+        ("As a parent, how would you help your child build character and moral values?",
+         "Create the ideal environment for their growth. Given nourishment, there is nothing that will not grow.",
+         "The child’s moral education must be greatly interfered with.",
+         -1),
+        ("Do you do good because...",
+         "you do it to just spread goodness to others? ",
+         "you hope to be treated by others the same way",
+         -1),
+        ("What is a gentleman?",
+         "Someone who can overcome and eradicate desire for material interests",
+         "Even when he speaks only a little, he is straightforward yet reserved in his use of words. ",
+         -1),
+        ("What is ritual used for?",
+         "To keep the temporary monarch in check, since they hold absolute moral power",
+         "Ritual is required so that the chaotic morally equal but socially divided men in a society become well-ordered.",
+         -1),
+        ("Should the king be the one owning most of  the resources or should resources be shared?",
+         "Minimally. If the king has enough food, shelter and beauties, the king has been given enough.",
+         "Yes! It is the luxuries the king can have that encourages him to follow the way",
+         -1),
+        ("question7",
+         "question3_m",
+         "question3_x",
+         -1),
+        ("question8",
+         "question3_m",
+         "question3_x",
+         -1),
+        ("question9",
+         "question3_m",
+         "question3_x",
+         -1),
+        ("question10",
+         "question3_m",
+         "question3_x",
+         -1),
+        ("question11",
+         "question3_m",
+         "question3_x",
+         -1)
+        ]
+len_qn = len(qn_d)-1
 # maybe store xunzi and mengzi texts in txt files instead
 xunzi_text = open("philos_texts/xunzi.txt", "r").read()
 mengzi_text = open("philos_texts/mengzi.txt", "r").read()
@@ -157,22 +157,30 @@ def getScore():
 # add quiz end page
 index = st.session_state.count
 
-my_bar = st.progress(index*int(100/len(qn_d)))
+my_bar = st.progress(index*int(100/(len(qn_d)+1)))
 
 if index < len(qn_d):
-    # add container
-    with st.container():
+    if index == 0:
+        st.title("Welcome to the Mengzi Xunzi Profiling Game!")
+        st.markdown("""
+        Are you more of a Mengzi or a Xunzi? \n
+        Take the quiz to see which philosopher you side more!!!
+        """)
+        moveFwd = st.button("Continue to quiz",
+                            key="startQz",  on_click=add_count)
+    else:
+        with st.container():
 
-        # add buttons
-        question, text1, text2, score = qn_d[index]
-        st.header(question)
-        clicked1 = st.button(
-            text1, key="btn1", on_click=countMengzi)
-        clicked2 = st.button(text2, key="btn2", on_click=countXunzi)
-        # for debugging purposes
-        st.write("Score: " + str(st.session_state.score))
-        st.write("Mengzi Score: " + str(st.session_state.mengScore))
-        st.write("Xunzi Score: " + str(st.session_state.xunScore))
+            # add buttons
+            question, text1, text2, score = qn_d[index]
+            st.header(question)
+            clicked1 = st.button(
+                text1, key="btn1", on_click=countMengzi)
+            clicked2 = st.button(text2, key="btn2", on_click=countXunzi)
+            # for debugging purposes
+            st.write("Score: " + str(st.session_state.score))
+            st.write("Mengzi Score: " + str(st.session_state.mengScore))
+            st.write("Xunzi Score: " + str(st.session_state.xunScore))
 
 #############################################################
 #################### QUIZ SEGMENT END #######################
@@ -196,6 +204,7 @@ elif index == len(qn_d):
         clicked1 = st.button("see all participants",
                              key="btn1",  on_click=add_count)
 
+# this else might be out of place
 else:
     st.title("Results")
     del st.session_state['count']  # clear all cache from this test run
@@ -214,6 +223,6 @@ else:
         setImage("img/sampleperson.png", ratio)
         st.markdown("Some description")
 
-#############################################################
-################# RESULTS SEGMENT END #####################
-#############################################################
+    #############################################################
+    ################# RESULTS SEGMENT END #####################
+    #############################################################
