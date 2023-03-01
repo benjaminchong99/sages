@@ -7,56 +7,48 @@ from streamlit_extras.switch_page_button import switch_page
 
 # st.header("Are you XunZi or MengZi")
 
-################ INSTANTIATION #############
+#############################################################
+##################### INSTANTIATION #########################
+#############################################################
+
 
 # add dictionary of questions
 # list of tuples?
 # Must be odd number of questions**
-qn_d = [("frontpage", "frontpage", "frontpage", "frontpage"),
+qn_d = [("frontpage", "frontpage", "frontpage"),
         ("How do you view the inner beauty (virtuousness) of humans?",
          "Displaying the innate beauty of human nature",
-         "Decorating/ beautifying self to hide the innate ugliness of human nature",
-         -1),  # points refer to bool of 1st value being xunzi
+         "Decorating/ beautifying self to hide the innate ugliness of human nature"),  # points refer to bool of 1st value being xunzi
         ("As a parent, how would you help your child build character and moral values?",
          "Create the ideal environment for their growth. Given nourishment, there is nothing that will not grow.",
-         "The child’s moral education must be greatly interfered with.",
-         -1),
+         "The child’s moral education must be greatly interfered with."),
         ("Do you do good because...",
          "you do it to just spread goodness to others? ",
-         "you hope to be treated by others the same way",
-         -1),
+         "you hope to be treated by others the same way"),
         ("What is a gentleman?",
          "Someone who can overcome and eradicate desire for material interests",
-         "Even when he speaks only a little, he is straightforward yet reserved in his use of words. ",
-         -1),
+         "Even when he speaks only a little, he is straightforward yet reserved in his use of words. "),
         ("What is ritual used for?",
          "To keep the temporary monarch in check, since they hold absolute moral power",
-         "Ritual is required so that the chaotic morally equal but socially divided men in a society become well-ordered.",
-         -1),
+         "Ritual is required so that the chaotic morally equal but socially divided men in a society become well-ordered."),
         ("Should the king be the one owning most of  the resources or should resources be shared?",
          "Minimally. If the king has enough food, shelter and beauties, the king has been given enough.",
-         "Yes! It is the luxuries the king can have that encourages him to follow the way",
-         -1),
+         "Yes! It is the luxuries the king can have that encourages him to follow the way"),
         ("question7",
          "question3_m",
-         "question3_x",
-         -1),
+         "question3_x"),
         ("question8",
          "question3_m",
-         "question3_x",
-         -1),
+         "question3_x"),
         ("question9",
          "question3_m",
-         "question3_x",
-         -1),
+         "question3_x"),
         ("question10",
          "question3_m",
-         "question3_x",
-         -1),
+         "question3_x"),
         ("question11",
          "question3_m",
-         "question3_x",
-         -1)
+         "question3_x")
         ]
 len_qn = len(qn_d)-1
 # maybe store xunzi and mengzi texts in txt files instead
@@ -81,7 +73,9 @@ if 'mengScore' not in st.session_state:
     st.session_state['mengScore'] = 0
     mengScore = 0
 
-################ INSTANTIATION END #############
+#############################################################
+################## INSTANTIATION ENDS #######################
+#############################################################
 
 # Adding count to Mengzi/Xunzi
 
@@ -125,6 +119,7 @@ def tallyResults(mengScore, xunScore):
     philoIdx = -1
 
     # setScore --> write to csv file
+    # set the higher percentage to be written first
     if xunStyle > mengStyle:
         st.write(xunzi_text)
         setScore("Xunzi")
@@ -136,7 +131,7 @@ def tallyResults(mengScore, xunScore):
 
     # write the percentage of xunzi mengzi per user
     st.markdown(
-        f"Based on the questions answered, you are: **:red[{compiledResults[philoIdx-1]}% {compiledResults[philoIdx]}]** and **:blue[{compiledResults[(philoIdx+1)%4]}% {compiledResults[(philoIdx+2)%4]}]**!!!")
+        f"## Based on the questions answered, you are: **:red[{compiledResults[philoIdx-1]}% {compiledResults[philoIdx]}]** and **:blue[{compiledResults[(philoIdx+1)%4]}% {compiledResults[(philoIdx+2)%4]}]**!!!")
 
 
 def getScore():
@@ -161,6 +156,7 @@ my_bar = st.progress(index*int(100/(len(qn_d)+1)))
 
 if index < len(qn_d):
     if index == 0:
+        # dummy qn, for the beginning of quiz page to give context
         st.title("Welcome to the Mengzi Xunzi Profiling Game!")
         st.markdown("""
         Are you more of a Mengzi or a Xunzi? \n
@@ -169,15 +165,18 @@ if index < len(qn_d):
         moveFwd = st.button("Continue to quiz",
                             key="startQz",  on_click=add_count)
     else:
+        # Asking all the questions
         with st.container():
 
             # add buttons
-            question, text1, text2, score = qn_d[index]
+            question, text1, text2 = qn_d[index]
             st.header(question)
+            # assuming always mengzi is btn1, xunzi is btn2
             clicked1 = st.button(
                 text1, key="btn1", on_click=countMengzi)
             clicked2 = st.button(text2, key="btn2", on_click=countXunzi)
-            # for debugging purposes
+
+            # ONLY FOR DEBUGGING PURPOSES
             st.write("Score: " + str(st.session_state.score))
             st.write("Mengzi Score: " + str(st.session_state.mengScore))
             st.write("Xunzi Score: " + str(st.session_state.xunScore))
@@ -192,19 +191,24 @@ if index < len(qn_d):
 
 # metrics should be addition of both and then a percentage per phil rather than negating one another?
 elif index == len(qn_d):
+    # count is > index of the list, show results of user
     with st.container():
 
         score = st.session_state.score
         mengScore = st.session_state.mengScore
         xunScore = st.session_state.xunScore
-        # write results
+        # write results with tallyResults function
         tallyResults(mengScore, xunScore)
 
         # buttons go to next "page"
+        # Ask users to go to the results page
+        st.markdown(
+            "Does the world side more with Mengzi or Xunzi? Head over to the Results page to find out more!")
+        # might be out of place
         clicked1 = st.button("see all participants",
                              key="btn1",  on_click=add_count)
 
-# this else might be out of place
+# else might be out of place
 else:
     st.title("Results")
     del st.session_state['count']  # clear all cache from this test run

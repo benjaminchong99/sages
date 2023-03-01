@@ -29,8 +29,8 @@ st.markdown(title_alignment, unsafe_allow_html=True)
 
 
 def setImage(ratioOfPhil, caption=None):
-    image1 = Image.open("img/sampleperson.png")
-    image2 = Image.open("img/sampleimg.jpg")
+    image1 = Image.open("img/xunziPortrait.jpg")
+    image2 = Image.open("img/mengziPortrait.jpg")
     width, height = image1.size
     # crop dimensions
     cropLen = int(width*ratioOfPhil)
