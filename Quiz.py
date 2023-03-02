@@ -130,7 +130,7 @@ def tallyResults(mengScore, xunScore):
         philoIdx = 1
 
     # write the percentage of xunzi mengzi per user
-    st.markdown(
+    st.markdown( 
         f"## Based on the questions answered, you are: **:red[{compiledResults[philoIdx-1]}% {compiledResults[philoIdx]}]** and **:blue[{compiledResults[(philoIdx+1)%4]}% {compiledResults[(philoIdx+2)%4]}]**!!!")
 
 
@@ -159,8 +159,10 @@ if index < len(qn_d):
         # dummy qn, for the beginning of quiz page to give context
         st.title("Welcome to the Mengzi Xunzi Profiling Game!")
         st.markdown("""
+        What type of confucious school of thought to you subscribe to!
         Are you more of a Mengzi or a Xunzi? \n
-        Take the quiz to see which philosopher you side more!!!
+        Take the quiz to understand more about yourself and get a 
+        glimpse of how these philosophers believe you can live life to the fullest!!!
         """)
         moveFwd = st.button("Continue to quiz",
                             key="startQz",  on_click=add_count)
@@ -172,9 +174,8 @@ if index < len(qn_d):
             question, text1, text2 = qn_d[index]
             st.header(question)
             # assuming always mengzi is btn1, xunzi is btn2
-            clicked1 = st.button(
-                text1, key="btn1", on_click=countMengzi)
-            clicked2 = st.button(text2, key="btn2", on_click=countXunzi)
+            clicked1 = st.button(text1, key="btn1", on_click=countMengzi, use_container_width=True)
+            clicked2 = st.button(text2, key="btn2", on_click=countXunzi, use_container_width=True)
 
             # ONLY FOR DEBUGGING PURPOSES
             st.write("Score: " + str(st.session_state.score))
@@ -213,19 +214,21 @@ else:
     st.title("Results")
     del st.session_state['count']  # clear all cache from this test run
     del st.session_state['score']
+    del st.session_state['xunScore'] 
+    del st.session_state['mengScore'] 
 
     ratio = getScore()  # xunzi/total
 
     col1, col2 = st.columns(2)  # 2 columns layout
     with col1:
         st.title("Mengzi")
-        setImage("img/sampleperson.png", (1-ratio))
-        st.markdown("Some description")
+        setImage("img/xunzi.png", (1-ratio))
+        # st.markdown("Some description")
 
     with col2:
         st.title("Xunzi")
-        setImage("img/sampleperson.png", ratio)
-        st.markdown("Some description")
+        setImage("img/mengzi.png", ratio)
+        # st.markdown("Some description")
 
     #############################################################
     ################# RESULTS SEGMENT END #####################
