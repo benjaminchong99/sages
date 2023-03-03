@@ -130,7 +130,7 @@ def tallyResults(mengScore, xunScore):
         philoIdx = 1
 
     # write the percentage of xunzi mengzi per user
-    st.markdown( 
+    st.markdown(
         f"## Based on the questions answered, you are: **:red[{compiledResults[philoIdx-1]}% {compiledResults[philoIdx]}]** and **:blue[{compiledResults[(philoIdx+1)%4]}% {compiledResults[(philoIdx+2)%4]}]**!!!")
 
 
@@ -152,7 +152,7 @@ def getScore():
 # add quiz end page
 index = st.session_state.count
 
-my_bar = st.progress(index*int(100/(len(qn_d)+1)))
+my_bar = st.progress(min(index*int(100/(len(qn_d))), 100))
 
 if index < len(qn_d):
     if index == 0:
@@ -174,8 +174,10 @@ if index < len(qn_d):
             question, text1, text2 = qn_d[index]
             st.header(question)
             # assuming always mengzi is btn1, xunzi is btn2
-            clicked1 = st.button(text1, key="btn1", on_click=countMengzi, use_container_width=True)
-            clicked2 = st.button(text2, key="btn2", on_click=countXunzi, use_container_width=True)
+            clicked1 = st.button(
+                text1, key="btn1", on_click=countMengzi, use_container_width=True)
+            clicked2 = st.button(
+                text2, key="btn2", on_click=countXunzi, use_container_width=True)
 
             # ONLY FOR DEBUGGING PURPOSES
             st.write("Score: " + str(st.session_state.score))
@@ -214,8 +216,8 @@ else:
     st.title("Results")
     del st.session_state['count']  # clear all cache from this test run
     del st.session_state['score']
-    del st.session_state['xunScore'] 
-    del st.session_state['mengScore'] 
+    del st.session_state['xunScore']
+    del st.session_state['mengScore']
 
     ratio = getScore()  # xunzi/total
 
