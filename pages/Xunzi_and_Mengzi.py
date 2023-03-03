@@ -99,7 +99,7 @@ Comparison Table
 ---
 | | Xunzi | Mengzi |
 | --- | --- | --- |
-| Innate Nature | content | content |
+| Innate Nature | Good | Bad |
 | Goodness | content | content |
 | Gentleman | content | content |
 | Ritual | content | content |
