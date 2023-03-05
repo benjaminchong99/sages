@@ -100,9 +100,9 @@ Comparison Table
 | | Xunzi | Mengzi |
 | --- | --- | --- |
 | Innate Nature | Good | Bad |
-| Goodness | content | content |
-| Gentleman | content | content |
-| Ritual | content | content |
+| Goodness | Comes from within and can be cultivated | Deliberate effort required and used to cover one’s innate “ugliness” |
+| Gentleman | Have a constant mind despite being without a means of livelihood | Constantly makes the effort to accumulate culture and continues to learn, following the ritual and yi |
+| Ritual | Important aspect of moral development and social harmony | Necessary to regulate behavior and maintain social order |
 | Monarch | content | content |
 
 """)
