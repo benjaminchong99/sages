@@ -170,8 +170,8 @@ else:
     st.title("Results")
     del st.session_state['count']  # clear all cache from this test run
     del st.session_state['score']
-    del st.session_state['xunScore'] 
-    del st.session_state['mengScore'] 
+    del st.session_state['xunScore']
+    del st.session_state['mengScore']
 
     x , y = getScore()  # xunzi/total
 
