@@ -3,7 +3,7 @@ from PIL import Image
 import csv
 import numpy as np
 from streamlit_extras.switch_page_button import switch_page
-
+from Description import description, qn_d
 
 # st.header("Are you XunZi or MengZi")
 
@@ -11,45 +11,11 @@ from streamlit_extras.switch_page_button import switch_page
 ##################### INSTANTIATION #########################
 #############################################################
 
-
 # add dictionary of questions
 # list of tuples?
 # Must be odd number of questions**
-qn_d = [("frontpage", "frontpage", "frontpage"),
-        ("How do you view the inner beauty (virtuousness) of humans?",
-         "Displaying the innate beauty of human nature",
-         "Decorating/ beautifying self to hide the innate ugliness of human nature"),  # points refer to bool of 1st value being xunzi
-        ("As a parent, how would you help your child build character and moral values?",
-         "Create the ideal environment for their growth. Given nourishment, there is nothing that will not grow.",
-         "The child’s moral education must be greatly interfered with."),
-        ("Do you do good because...",
-         "you do it to just spread goodness to others? ",
-         "you hope to be treated by others the same way"),
-        ("What is a gentleman?",
-         "Someone who can overcome and eradicate desire for material interests",
-         "Even when he speaks only a little, he is straightforward yet reserved in his use of words. "),
-        ("What is ritual used for?",
-         "To keep the temporary monarch in check, since they hold absolute moral power",
-         "Ritual is required so that the chaotic morally equal but socially divided men in a society become well-ordered."),
-        ("Should the king be the one owning most of  the resources or should resources be shared?",
-         "Minimally. If the king has enough food, shelter and beauties, the king has been given enough.",
-         "Yes! It is the luxuries the king can have that encourages him to follow the way"),
-        ("question7",
-         "question3_m",
-         "question3_x"),
-        ("question8",
-         "question3_m",
-         "question3_x"),
-        ("question9",
-         "question3_m",
-         "question3_x"),
-        ("question10",
-         "question3_m",
-         "question3_x"),
-        ("question11",
-         "question3_m",
-         "question3_x")
-        ]
+qn_d = qn_d()
+
 len_qn = len(qn_d)-1
 # maybe store xunzi and mengzi texts in txt files instead
 xunzi_text = open("philos_texts/xunzi.txt", "r").read()
@@ -80,23 +46,10 @@ if 'mengScore' not in st.session_state:
 # Adding count to Mengzi/Xunzi
 
 
-def countMengzi():
+def countScore(isXunZi): #isXunZi is 0 or 1
     st.session_state.count += 1
-    st.session_state.mengScore += 1
-    st.session_state.score -= 1
-
-
-def countXunzi():
-    st.session_state.count += 1
-    st.session_state.xunScore += 1
-    st.session_state.score += 1
-    # if xunzi at the bottom, it would add one (it's like hinge loss)
-
-
-def add_count():
-    # count = st.session_state.count
-    st.session_state.count += 1
-
+    st.session_state.mengScore += isXunZi
+    st.session_state.xunScore += 1-isXunZi 
 
 # can try image.resize(width,height) and then load new image
 def setImage(pathToImg, ratio, caption=None):
@@ -104,12 +57,14 @@ def setImage(pathToImg, ratio, caption=None):
     width, height = image.size
     st.image(image, caption=caption, width=int(width*ratio))
 
+def add_count():
+    st.session_state.count += 1
 
 def setScore(scholar):
-    with open('scholars.txt', 'w') as f:
+    with open('scholars.txt', 'a') as f:
         f.write(scholar)
-        f.write('\n')
-
+        f.write("\n")
+        f.close()
 
 def tallyResults(mengScore, xunScore):
     # percentage profile
@@ -120,19 +75,18 @@ def tallyResults(mengScore, xunScore):
 
     # setScore --> write to csv file
     # set the higher percentage to be written first
-    if xunStyle > mengStyle:
-        st.write(xunzi_text)
-        setScore("Xunzi")
-        philoIdx = 3
-    else:
-        st.write(mengzi_text)
-        setScore("Mengzi")
-        philoIdx = 1
-
     # write the percentage of xunzi mengzi per user
     st.markdown( 
-        f"## Based on the questions answered, you are: **:red[{compiledResults[philoIdx-1]}% {compiledResults[philoIdx]}]** and **:blue[{compiledResults[(philoIdx+1)%4]}% {compiledResults[(philoIdx+2)%4]}]**!!!")
+        f"Based on the questions answered, you are: \n## **:red[{compiledResults[philoIdx-1]}% {compiledResults[philoIdx]}]** and **:blue[{compiledResults[(philoIdx+1)%4]}% {compiledResults[(philoIdx+2)%4]}]**")
 
+    if xunScore > mengScore:
+        st.markdown(xunzi_text) 
+        setScore("XunZi")
+        philoIdx = 3
+    else:
+        st.markdown(mengzi_text)
+        setScore("MengZi")
+        philoIdx = 1
 
 def getScore():
     with open('scholars.txt', 'r') as f:
@@ -142,7 +96,10 @@ def getScore():
         farray = np.array(flist)
         values, counts = np.unique(farray, return_counts=True)
 
-        return counts[0]/sum(counts)
+        x = ["MengZi","XunZi"]
+        y = [int(counts[0]), int(sum(counts))-1-int(counts[0])]
+        f.close()
+    return x,y
 
 #############################################################
 #################### QUIZ SEGMENT START #####################
@@ -151,8 +108,9 @@ def getScore():
 
 # add quiz end page
 index = st.session_state.count
-
-my_bar = st.progress(index*int(100/(len(qn_d)+1)))
+bar_index = min(len(qn_d), index)
+ 
+my_bar = st.progress(bar_index*int(100/(len(qn_d))))
 
 if index < len(qn_d):
     if index == 0:
@@ -171,14 +129,13 @@ if index < len(qn_d):
         with st.container():
 
             # add buttons
-            question, text1, text2 = qn_d[index]
+            question, text1, text2, isXunZi = qn_d[index] # where first question is XunZi
             st.header(question)
             # assuming always mengzi is btn1, xunzi is btn2
-            clicked1 = st.button(text1, key="btn1", on_click=countMengzi, use_container_width=True)
-            clicked2 = st.button(text2, key="btn2", on_click=countXunzi, use_container_width=True)
+            clicked1 = st.button(text1, key="btn1", on_click=countScore,use_container_width=True, args=(1-isXunZi, ))
+            clicked2 = st.button(text2, key="btn2", on_click=countScore, use_container_width=True, args=(isXunZi, ))
 
             # ONLY FOR DEBUGGING PURPOSES
-            st.write("Score: " + str(st.session_state.score))
             st.write("Mengzi Score: " + str(st.session_state.mengScore))
             st.write("Xunzi Score: " + str(st.session_state.xunScore))
 
@@ -195,7 +152,6 @@ elif index == len(qn_d):
     # count is > index of the list, show results of user
     with st.container():
 
-        score = st.session_state.score
         mengScore = st.session_state.mengScore
         xunScore = st.session_state.xunScore
         # write results with tallyResults function
@@ -204,7 +160,7 @@ elif index == len(qn_d):
         # buttons go to next "page"
         # Ask users to go to the results page
         st.markdown(
-            "Does the world side more with Mengzi or Xunzi? Head over to the Results page to find out more!")
+            ":orange[Does the world side more with Mengzi or Xunzi? Head over to the Results page to find out more!]")
         # might be out of place
         clicked1 = st.button("see all participants",
                              key="btn1",  on_click=add_count)
@@ -217,18 +173,26 @@ else:
     del st.session_state['xunScore'] 
     del st.session_state['mengScore'] 
 
-    ratio = getScore()  # xunzi/total
+    x , y = getScore()  # xunzi/total
 
-    col1, col2 = st.columns(2)  # 2 columns layout
+    d = {x[0]: y[0], x[1]: y[1]}
+    col1, col2,col3 = st.columns(3)  # 2 columns layout
     with col1:
         st.title("Mengzi")
-        setImage("img/xunzi.png", (1-ratio))
+        setImage("img/xunzi.png", 0.7)
+        # st.markdown("Some description")
+    with col2:
+        # add bar chart
+        st.markdown("\n\n\n")
+        st.bar_chart(d)
+    with col3: 
+        st.title("Xunzi")
+        setImage("img/mengzi.png", 0.7)
         # st.markdown("Some description")
 
-    with col2:
-        st.title("Xunzi")
-        setImage("img/mengzi.png", ratio)
-        # st.markdown("Some description")
+    # the descriptions of the questions
+    description() 
+
 
     #############################################################
     ################# RESULTS SEGMENT END #####################
