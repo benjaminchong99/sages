@@ -145,8 +145,8 @@ if index < len(qn_d):
                                  use_container_width=True, args=(isXunZi, ))
 
             # ONLY FOR DEBUGGING PURPOSES
-            st.write("Mengzi Score: " + str(st.session_state.mengScore))
-            st.write("Xunzi Score: " + str(st.session_state.xunScore))
+            # st.write("Mengzi Score: " + str(st.session_state.mengScore))
+            # st.write("Xunzi Score: " + str(st.session_state.xunScore))
 
 #############################################################
 #################### QUIZ SEGMENT END #######################
