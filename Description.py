@@ -39,9 +39,9 @@ def description():
 
 def qn_d():
     qn_d = [("frontpage", "frontpage", "frontpage"),
-            ("How do you view the inner beauty?", # points refer to bool of 1st value being xunzi
-            "One's nature is malleable and can be decorated as one chooses, much like the a ceramic pot.",
-            "One's nature is inherent and simply needs to given the right circumstances to blossom.",1),  
+            ("How do you view inner beauty?", # points refer to bool of 1st value being xunzi
+            "One's nature is malleable and can be decorated as one chooses, much like a ceramic pot.",
+            "One's nature is inherent and simply needs to be given the right circumstances to blossom.",1),  
             ("Throughout your life, how do you improve yourself as a person?",
             "Give yourself the space to explore and develop, through your own trail and errors in life",
             "Read self-help books and implement their reccomendations in your daily life", 0),
@@ -73,7 +73,7 @@ def qn_d():
             "Feeling bad and realizing the mistake you have done",
             "Being pointed out by others on your mistake", 0),
             ("If you were put on the death sentence for something you didn’t do, and were offered a way out but to stay a criminal, would you:",
-            "No (escape prison, keep your life and stay wronged) Will you give up your life to maintain righteousness (better phrasing) If wronged and set for death sentence, is it more important to be right or is it more important to be alive (better phrasing) ",
+            "No (escape prison, keep your life and stay wronged)",
             "Yes (stay in prison and die knowing you did know wrong)",1),
             ("Purpose of education",
             "should be holistic and encompass all aspects of human experience, including ethical, intellectual, and physical development",
