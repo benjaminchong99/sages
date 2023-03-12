@@ -2,7 +2,6 @@ import streamlit as st
 from PIL import Image
 import csv
 import numpy as np
-from streamlit_extras.switch_page_button import switch_page
 from Description import description, qn_d
 
 # st.header("Are you XunZi or MengZi")
@@ -46,25 +45,30 @@ if 'mengScore' not in st.session_state:
 # Adding count to Mengzi/Xunzi
 
 
-def countScore(isXunZi): #isXunZi is 0 or 1
+def countScore(isXunZi):  # isXunZi is 0 or 1
     st.session_state.count += 1
     st.session_state.mengScore += isXunZi
-    st.session_state.xunScore += 1-isXunZi 
+    st.session_state.xunScore += 1-isXunZi
 
 # can try image.resize(width,height) and then load new image
+
+
 def setImage(pathToImg, ratio, caption=None):
     image = Image.open(pathToImg)
     width, height = image.size
     st.image(image, caption=caption, width=int(width*ratio))
 
+
 def add_count():
     st.session_state.count += 1
+
 
 def setScore(scholar):
     with open('scholars.txt', 'a') as f:
         f.write(scholar)
         f.write("\n")
         f.close()
+
 
 def tallyResults(mengScore, xunScore):
     # percentage profile
@@ -76,17 +80,18 @@ def tallyResults(mengScore, xunScore):
     # setScore --> write to csv file
     # set the higher percentage to be written first
     # write the percentage of xunzi mengzi per user
-    st.markdown( 
+    st.markdown(
         f"Based on the questions answered, you are: \n## **:red[{compiledResults[philoIdx-1]}% {compiledResults[philoIdx]}]** and **:blue[{compiledResults[(philoIdx+1)%4]}% {compiledResults[(philoIdx+2)%4]}]**")
 
     if xunScore > mengScore:
-        st.markdown(xunzi_text) 
+        st.markdown(xunzi_text)
         setScore("XunZi")
         philoIdx = 3
     else:
         st.markdown(mengzi_text)
         setScore("MengZi")
         philoIdx = 1
+
 
 def getScore():
     with open('scholars.txt', 'r') as f:
@@ -95,11 +100,12 @@ def getScore():
 
         farray = np.array(flist)
         values, counts = np.unique(farray, return_counts=True)
+        # print(counts)
 
-        x = ["MengZi","XunZi"]
-        y = [int(counts[0]), int(sum(counts))-1-int(counts[0])]
+        x = ["MengZi", "XunZi"]
+        y = [int(counts[1]), int(counts[2])]
         f.close()
-    return x,y
+    return x, y
 
 #############################################################
 #################### QUIZ SEGMENT START #####################
@@ -109,7 +115,7 @@ def getScore():
 # add quiz end page
 index = st.session_state.count
 bar_index = min(len(qn_d), index)
- 
+
 my_bar = st.progress(bar_index*int(100/(len(qn_d))))
 
 if index < len(qn_d):
@@ -129,15 +135,18 @@ if index < len(qn_d):
         with st.container():
 
             # add buttons
-            question, text1, text2, isXunZi = qn_d[index] # where first question is XunZi
+            # where first question is XunZi
+            question, text1, text2, isXunZi = qn_d[index]
             st.header(question)
             # assuming always mengzi is btn1, xunzi is btn2
-            clicked1 = st.button(text1, key="btn1", on_click=countScore,use_container_width=True, args=(1-isXunZi, ))
-            clicked2 = st.button(text2, key="btn2", on_click=countScore, use_container_width=True, args=(isXunZi, ))
+            clicked1 = st.button(text1, key="btn1", on_click=countScore,
+                                 use_container_width=True, args=(1-isXunZi, ))
+            clicked2 = st.button(text2, key="btn2", on_click=countScore,
+                                 use_container_width=True, args=(isXunZi, ))
 
             # ONLY FOR DEBUGGING PURPOSES
-            st.write("Mengzi Score: " + str(st.session_state.mengScore))
-            st.write("Xunzi Score: " + str(st.session_state.xunScore))
+            # st.write("Mengzi Score: " + str(st.session_state.mengScore))
+            # st.write("Xunzi Score: " + str(st.session_state.xunScore))
 
 #############################################################
 #################### QUIZ SEGMENT END #######################
@@ -173,10 +182,10 @@ else:
     del st.session_state['xunScore']
     del st.session_state['mengScore']
 
-    x , y = getScore()  # xunzi/total
+    x, y = getScore()  # xunzi/total
 
     d = {x[0]: y[0], x[1]: y[1]}
-    col1, col2,col3 = st.columns(3)  # 2 columns layout
+    col1, col2, col3 = st.columns(3)  # 2 columns layout
     with col1:
         st.title("Mengzi")
         setImage("img/xunzi.png", 0.7)
@@ -185,14 +194,13 @@ else:
         # add bar chart
         st.markdown("\n\n\n")
         st.bar_chart(d)
-    with col3: 
+    with col3:
         st.title("Xunzi")
         setImage("img/mengzi.png", 0.7)
         # st.markdown("Some description")
 
     # the descriptions of the questions
-    description() 
-
+    description()
 
     #############################################################
     ################# RESULTS SEGMENT END #####################
