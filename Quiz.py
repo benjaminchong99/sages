@@ -169,7 +169,7 @@ elif index == len(qn_d):
         # buttons go to next "page"
         # Ask users to go to the results page
         st.markdown(
-            ":orange[Does the world side more with Mengzi or Xunzi? Head over to the Results page to find out more!]")
+            ":orange[Does the responses from others side more with Mengzi or Xunzi? Head over to the Results page to find out more!]")
         # might be out of place
         clicked1 = st.button("see all participants",
                              key="btn1",  on_click=add_count)
@@ -188,7 +188,7 @@ else:
     col1, col2, col3 = st.columns(3)  # 2 columns layout
     with col1:
         st.title("Mengzi")
-        setImage("img/xunzi.png", 0.7)
+        setImage("img/mengziPortrait.jpg", 0.6)
         # st.markdown("Some description")
     with col2:
         # add bar chart
@@ -196,7 +196,7 @@ else:
         st.bar_chart(d)
     with col3:
         st.title("Xunzi")
-        setImage("img/mengzi.png", 0.7)
+        setImage("img/xunziPortrait.png", 0.3)
         # st.markdown("Some description")
 
     # the descriptions of the questions
