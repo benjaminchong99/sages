@@ -200,6 +200,9 @@ else:
         # st.markdown("Some description")
 
     # the descriptions of the questions
+    st.write("""### About the Philosophers \n\n"
+        Mengzi(孟子) and Xunzi(荀子) were both Confucian philosophers that lived in ancient China during the 4th cetury BCE and 3rd century BCE respectively.\n\nMengzi was born in the State of Zou and served as a government official and scholar in the State of Qi during the Warring States period. He is well-known mainly for his claim that “human nature is good.” On the other hand, Xunzi was born in the State of Zhao and studied at the prestigious Jixia Academy, where he studied the major philosophical traditions of his time. He is well-known mainly for having contrasting views from Mengzi and claiming “human nature is bad.” Read on below to learn more about how each philosopher viewed the different topics related to the questions!
+        """)
     description()
 
     #############################################################
